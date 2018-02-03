@@ -24,7 +24,7 @@ class HashTable:
 
     def __step_by_step(self, step_ord):
 
-        print("step %s".format(step_ord))
+        print("step {0}".format(step_ord))
         print([i for i in range(len(self.values))])
         print(self.values)
 
@@ -36,10 +36,10 @@ class HashTable:
             i += 1
 
     def double_next_prime(self):
-        i = 2
+        i = 1
         value = 2 * self.size_table
 
-        while not self.__check_prime(value + i):
+        while not self.__check_prime(value):
             value += i
 
         return value
@@ -53,14 +53,20 @@ class HashTable:
 
         while self.values[new_key] is not None \
                 and self.values[new_key] != key:
-            new_key += 1
 
+            if self.values.count(None) > 0:
+                new_key += 1
+            else:
+                new_key = None
+                break
         return new_key
 
     def rehashing(self):
         survivor_values = [value for value in self.values if value is not None]
+        print(survivor_values)
         self.size_table = self.double_next_prime()
-        self.keys = self.values = [None] * self.size_table
+        self.keys = [None] * self.size_table
+        self.values = [None]*self.size_table #hell's pointers D: don't DRY ;/
         list(map(self.insert_data, survivor_values))
 
     def insert_data(self, data):
@@ -73,8 +79,9 @@ class HashTable:
             pass
 
         else:
-            if None in self.values:
-                self.__set_value(self.colision_resolution(key), data)
+            colision_resolution = self.colision_resolution(key)
+            if colision_resolution is not None:
+                self.__set_value(colision_resolution, data)
             else:
                 self.rehashing()
     
