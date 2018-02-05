@@ -1,3 +1,5 @@
+from ..number_theory import double_next_prime
+
 class HashTable:
     """
         Basic Hash Table example with open addressing and linear probing
@@ -21,12 +23,6 @@ class HashTable:
     def hash_function(self, key):
         return key % self.size_table
 
-    def __check_prime(self, number):
-        """
-            it's not the best solution
-        """
-        return all([number % i for i in range(2, number)])
-
     def __step_by_step(self, step_ord):
 
         print("step {0}".format(step_ord))
@@ -40,15 +36,6 @@ class HashTable:
             self.insert_data(value)
             self.__step_by_step(i)
             i += 1
-
-    def double_next_prime(self):
-        i = 1
-        value = 2 * self.size_table
-
-        while not self.__check_prime(value):
-            value += i
-
-        return value
 
     def __set_value(self, key, data):
         self.values[key] = data
@@ -70,10 +57,11 @@ class HashTable:
 
     def rehashing(self):
         survivor_values = [value for value in self.values if value is not None]
-        self.size_table = self.double_next_prime()
+        self.size_table = double_next_prime(self.size_table)
         self.__keys.clear()
         self.values = [None] * self.size_table #hell's pointers D: don't DRY ;/
-        [self.insert_data(data) for data in survivor_values]
+        map(self.insert_data, survivor_values)
+        #[self.insert_data(data) for data in survivor_values]
 
     def insert_data(self, data):
         key = self.hash_function(data)
