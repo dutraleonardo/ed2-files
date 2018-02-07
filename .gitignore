@@ -1,5 +1,6 @@
 *.py[co]
 src/hashing/__pycache__/
+src/test.py
 env/
 .idea/
 .vscode/

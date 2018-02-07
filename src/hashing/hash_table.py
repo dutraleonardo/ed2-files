@@ -25,7 +25,7 @@ class HashTable:
     def hash_function(self, key):
         return key % self.size_table
 
-    def __step_by_step(self, step_ord):
+    def _step_by_step(self, step_ord):
 
         print("step {0}".format(step_ord))
         print([i for i in range(len(self.values))])
@@ -36,14 +36,14 @@ class HashTable:
         self.__aux_list = values
         for value in values:
             self.insert_data(value)
-            self.__step_by_step(i)
+            self._step_by_step(i)
             i += 1
 
-    def __set_value(self, key, data):
+    def _set_value(self, key, data):
         self.values[key] = data
         self.__keys[key] = data
 
-    def colision_resolution(self, key):
+    def _colision_resolution(self, key, data=None):
         new_key = self.hash_function(key + 1)
 
         while self.values[new_key] is not None \
@@ -68,15 +68,15 @@ class HashTable:
         key = self.hash_function(data)
 
         if self.values[key] is None:
-            self.__set_value(key, data)
+            self._set_value(key, data)
 
         elif self.values[key] == data:
             pass
 
         else:
-            colision_resolution = self.colision_resolution(key)
+            colision_resolution = self._colision_resolution(key, data)
             if colision_resolution is not None:
-                self.__set_value(colision_resolution, data)
+                self._set_value(colision_resolution, data)
             else:
                 self.rehashing()
                 self.insert_data(data)

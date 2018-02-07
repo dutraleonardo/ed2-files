@@ -10,19 +10,17 @@ class QuadraticProbing(HashTable):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def colision_resolution(self, key):
+    def _colision_resolution(self, key, data=None):
         i = 1
         new_key = self.hash_function(key + i*i)
 
         while self.values[new_key] is not None \
                 and self.values[new_key] != key:
+            i += 1
+            new_key = self.hash_function(key + i*i) if not \
+                self.balanced_factor() >= self.lim_charge else None
 
-            if self.balanced_factor() >= self.lim_charge:
-                new_key = None
+            if new_key is None:
                 break
-
-            else:
-                i += 1
-            new_key = self.hash_function(key + i*i)
 
         return new_key
