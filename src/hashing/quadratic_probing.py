@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from .hash_table import HashTable
 
 
@@ -21,6 +23,6 @@ class QuadraticProbing(HashTable):
 
             else:
                 i += 1
-                new_key = self.hash_function(key + i*i)
+            new_key = self.hash_function(key + i*i)
 
         return new_key

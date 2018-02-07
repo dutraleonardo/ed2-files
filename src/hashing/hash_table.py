@@ -1,4 +1,6 @@
-from ..number_theory import double_next_prime
+#!/usr/bin/env python3
+from number_theory.prime_numbers import next_prime
+
 
 class HashTable:
     """
@@ -57,11 +59,10 @@ class HashTable:
 
     def rehashing(self):
         survivor_values = [value for value in self.values if value is not None]
-        self.size_table = double_next_prime(self.size_table)
+        self.size_table = next_prime(self.size_table, factor=2)
         self.__keys.clear()
         self.values = [None] * self.size_table #hell's pointers D: don't DRY ;/
         map(self.insert_data, survivor_values)
-        #[self.insert_data(data) for data in survivor_values]
 
     def insert_data(self, data):
         key = self.hash_function(data)
