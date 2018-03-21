@@ -78,9 +78,6 @@ class AvlTree:
             the width of the box, and the start-end positions of the new root value
             repr string.
         :rtype: ([str], int, int, int)
-
-        .. _level-order:
-            https://en.wikipedia.org/wiki/Tree_traversal
         """
         if root is None:
             return [], 0, 0, 0
