@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
-from binarytree import Node
+# from binarytree import Node
+
+
+class Node(object):
+    def __init__(self, value, left=None, right=None):
+
+        """Basic node representation
+            :param value: key value node
+            :param left: left node object of the current node( self )
+            :param right: right node object of the current node( self )
+        """
+        self.value = value
+        self.left = left
+        self.right = right
 
 
 class AvlTree:
@@ -35,7 +48,7 @@ class AvlTree:
             node.right = Node(value)
             return
         else:
-            self._balance(node)
+            return self._balance(node)
     
     def _balance(self, node):
         pass
