@@ -38,6 +38,7 @@ In [4]: ht.keys()
 In [5]: {0: 66, 1: 89, 2: 90, 3: 56, 4: 78, 6: 17, 10: 43}
 ```
 * Binary Search Tree ( Without balancing yet)
+```
 In [1] : from src.avl_tree.avl import AvlTree
 In [2] : tree = AvlTree()
 In [3] : tree.bulk_insert([56, 73, 21, 80, 43, 21])
@@ -47,6 +48,7 @@ In [4] : tree.display()
 21       73
   \        \
    43       80
+   ```
 
 
 
