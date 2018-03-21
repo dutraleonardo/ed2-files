@@ -57,6 +57,7 @@ class AvlTree:
             current_node = self.root if self.root is not None else None
             
         else:
+<<<<<<< HEAD
             pass
             # self.root = current_node if self.root is None else self.root
             
@@ -73,6 +74,9 @@ class AvlTree:
 
         current_node.height = max(self._height(current_node.left), self._height(current_node.right)) + 1
         return current_node
+=======
+            return self._balance(node)
+>>>>>>> patter node added
     
     def _balance(self, node):
         print('node to balance: ' + str(node.value))
