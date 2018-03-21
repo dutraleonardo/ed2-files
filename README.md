@@ -2,6 +2,10 @@
 This repository consist in all implementations of the data structures seen at UECE'S course of advanced data structures ministered by professor Marcos Negreiros. 
 The goal of this project is that be used like material study. 
 
+### Prerequisites
+
+* Python 3.5.2
+
 ## Current Data Structures
 * Hashing ( Linear Probing, Quadratic Probing, Double Hash and hash with linked list)
 * Basic Binary search tree with display in shell
