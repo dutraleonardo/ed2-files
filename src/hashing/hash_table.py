@@ -4,16 +4,23 @@ from number_theory.prime_numbers import next_prime
 
 class HashTable:
     """
-        Basic Hash Table example with open addressing and linear probing
+        Basic Hash Table example with open addressing and linear probing.
+        This class works as father of other hash table variations
     """
 
     def __init__(self, size_table, charge_factor=None, lim_charge=None):
+        """
+
+        :param size_table: recommended a prime number
+        :param charge_factor: define the charge per slot
+        :param lim_charge: define when rehashing must be done
+        """
         self.size_table = size_table
-        self.values = [None] * self.size_table
+        self.values = [None] * self.size_table #the hash table start with empty slots
         self.lim_charge = 0.75 if lim_charge is None else lim_charge
         self.charge_factor = 1 if charge_factor is None else charge_factor
         self.__aux_list = []
-        self._keys = {}
+        self._keys = {} # the result of hash_function operation
 
     def keys(self):
         return self._keys
@@ -23,6 +30,11 @@ class HashTable:
                     if slot is not None]) / (self.size_table * self.charge_factor)
 
     def hash_function(self, key):
+        """
+
+        :param key: value of slot
+        :return: a key that represent the position of key-value in array
+        """
         return key % self.size_table
 
     def _step_by_step(self, step_ord):
