@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from number_theory.prime_numbers import next_prime
-
+from terminaltables import AsciiTable
 
 class HashTable:
     """
@@ -37,11 +37,19 @@ class HashTable:
         """
         return key % self.size_table
 
+    def mount_table(self):
+        table = [
+            [index for index in range(len(self.values))],
+            [value for value in self.values]
+        ]
+        return AsciiTable(table).table
+
     def _step_by_step(self, step_ord):
 
         print("step {0}".format(step_ord))
-        print([i for i in range(len(self.values))])
-        print(self.values)
+        # print([i for i in range(len(self.values))])
+        # print(self.values)
+        print(self.mount_table())
 
     def bulk_insert(self, values):
         i = 1
