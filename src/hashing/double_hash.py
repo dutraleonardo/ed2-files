@@ -27,7 +27,9 @@ class DoubleHash(HashTable):
         while self.values[new_key] is not None and self.values[new_key] != key:
             new_key = self.__hash_double_function(key, data, i) if \
                 self.balanced_factor() >= self.lim_charge else None
-            if new_key is None: break 
-            else: i += 1
+            if new_key is None:
+                break
+            else:
+                i += 1
 
         return new_key
