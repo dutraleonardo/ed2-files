@@ -23,13 +23,29 @@ class DoubleHash(HashTable):
     def _colision_resolution(self, key, data=None):
         i = 1
         new_key = self.hash_function(data)
+# <<<<<<< HEAD
 
-        while self.values[new_key] is not None and self.values[new_key] != key:
-            new_key = self.__hash_double_function(key, data, i) if \
-                self.balanced_factor() >= self.lim_charge else None
-            if new_key is None:
+#         while self.values[new_key] is not None and self.values[new_key] != key:
+#             new_key = self.__hash_double_function(key, data, i) if \
+#                 self.balanced_factor() >= self.lim_charge else None
+#             if new_key is None:
+#                 break
+#             else:
+#                 i += 1
+# =======
+        while self.values[new_key] is not None \
+                 and self.values[new_key] != key:
+            if self.balanced_factor() >= self.lim_charge:
+                new_key = None
                 break
             else:
+                new_key = (i * self.__hash_function_2(key, data)) % self.size_table
                 i += 1
+        # while self.values[new_key] is not None and self.values[new_key] != key:
+        #     new_key = self.__hash_double_function(key, data, i) if \
+        #         self.balanced_factor() >= self.lim_charge else None
+        #     if new_key is None: break
+        #     else: i += 1
+>>>>>>> alternative double changed to initial code
 
         return new_key
