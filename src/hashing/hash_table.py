@@ -22,6 +22,8 @@ class HashTable:
         self.__aux_list = []
         self._keys = {} # the result of hash_function operation
 
+
+
     def keys(self):
         return self._keys
 
@@ -31,7 +33,6 @@ class HashTable:
 
     def hash_function(self, key):
         """
-
         :param key: value of slot
         :return: a key that represent the position of key-value in array
         """
@@ -44,19 +45,34 @@ class HashTable:
         ]
         return AsciiTable(table).table
 
-    def _step_by_step(self, step_ord):
+    def _step_by_step(self, step_ord, data_insert_tuple):
 
+        # print(data_insert_tuple)
         print("step {0}".format(step_ord))
-        # print([i for i in range(len(self.values))])
-        # print(self.values)
+        if data_insert_tuple is not None:
+            if len(data_insert_tuple) == 2:
+                key, data = data_insert_tuple
+                print("{0} mod {1} = {2}".format(data, self.size_table, key))
+            elif len(data_insert_tuple) > 2:
+                # print(data_insert_tuple)
+                data, colision_list_items, new_key = data_insert_tuple
+                if len(colision_list_items) > 0:
+                    [print("colision: {0} mod {1} = {2}".format(data + index, self.size_table, item)) for index, item
+                     in enumerate(colision_list_items)]
+                    print("{0} insert in bucket {1}".format(data, new_key))
+            else:
+                print("Rehashing")
+
+        else:
+            print()
         print(self.mount_table())
 
     def bulk_insert(self, values):
         i = 1
         self.__aux_list = values
         for value in values:
-            self.insert_data(value)
-            self._step_by_step(i)
+            # self.insert_data(value)
+            self._step_by_step(i, self.insert_data(value))
             i += 1
 
     def _set_value(self, key, data):
@@ -64,18 +80,22 @@ class HashTable:
         self._keys[key] = data
 
     def _colision_resolution(self, key, data=None):
+
+        colision_resolution_items = []
+        colision_resolution_items.append(key)
         new_key = self.hash_function(key + 1)
 
         while self.values[new_key] is not None \
                 and self.values[new_key] != key:
 
             if self.values.count(None) > 0:
+                colision_resolution_items.append(new_key)
                 new_key = self.hash_function(new_key + 1)
             else:
                 new_key = None
                 break
 
-        return new_key
+        return colision_resolution_items, new_key
 
     def rehashing(self):
         survivor_values = [value for value in self.values if value is not None]
@@ -89,16 +109,21 @@ class HashTable:
 
         if self.values[key] is None:
             self._set_value(key, data)
+            return key, data
 
         elif self.values[key] == data:
             pass
 
         else:
-            colision_resolution = self._colision_resolution(key, data)
-            if colision_resolution is not None:
-                self._set_value(colision_resolution, data)
+            colision_list_items, new_key = self._colision_resolution(key, data)
+            if new_key is not None:
+                self._set_value(new_key, data)
+                return data, colision_list_items, new_key
             else:
                 self.rehashing()
+                print("rehashing {0}".format(self.size_table))
                 self.insert_data(data)
+
+
 
 
