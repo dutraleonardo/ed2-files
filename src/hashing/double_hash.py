@@ -22,6 +22,9 @@ class DoubleHash(HashTable):
 
     def _colision_resolution(self, key, data=None):
         i = 1
+        colision_resolution_items = []
+        colision_resolution_items.append(key)
+
         new_key = self.hash_function(data)
 #                 i += 1
 
@@ -30,6 +33,7 @@ class DoubleHash(HashTable):
                 new_key = None
                 break
             else:
+                colision_resolution_items.append(new_key)
                 new_key = (i * self.__hash_function_2(key, data)) % self.size_table
                 i += 1
-        return new_key
+        return colision_resolution_items, new_key
