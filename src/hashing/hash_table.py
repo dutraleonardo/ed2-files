@@ -21,8 +21,10 @@ class HashTable:
         self.charge_factor = 1 if charge_factor is None else charge_factor
         self.__aux_list = []
         self._keys = {} # the result of hash_function operation
+        [self._initialize_keys(index) for index in range(self.size_table)]
 
-
+    def _initialize_keys(self, index):
+        self._keys[index] = None
 
     def keys(self):
         return self._keys
@@ -38,12 +40,15 @@ class HashTable:
         """
         return key % self.size_table
 
-    def mount_table(self):
+    def _mount_table(self):
         table = [
             [index for index in range(len(self.values))],
             [value for value in self.values]
         ]
         return AsciiTable(table).table
+
+    def _str_hash_function(self, data, key):
+        return "{0} mod {1} = {2}".format(data, self.size_table, key)
 
     def _step_by_step(self, step_ord, data_insert_tuple):
 
@@ -52,12 +57,12 @@ class HashTable:
         if data_insert_tuple is not None:
             if len(data_insert_tuple) == 2:
                 key, data = data_insert_tuple
-                print("{0} mod {1} = {2}".format(data, self.size_table, key))
+                print(self._str_hash_function(data, key))
+                print("{0} insert in bucket {1}".format(data, key))
             elif len(data_insert_tuple) > 2:
-                # print(data_insert_tuple)
                 data, colision_list_items, new_key = data_insert_tuple
                 if len(colision_list_items) > 0:
-                    [print("colision: {0} mod {1} = {2}".format(data + index, self.size_table, item)) for index, item
+                    [print("colision: " + self._str_hash_function(data + index, item)) for index, item
                      in enumerate(colision_list_items)]
                     print("{0} insert in bucket {1}".format(data, new_key))
             else:
@@ -65,7 +70,7 @@ class HashTable:
 
         else:
             print()
-        print(self.mount_table())
+        print(self._mount_table())
 
     def bulk_insert(self, values):
         i = 1

@@ -22,21 +22,33 @@ class DoubleHash(HashTable):
 
     def _colision_resolution(self, key, data=None):
         i = 1
-        # colision_resolution_items = []
-        # colision_resolution_items.append(key)
+        colision_resolution_items = []
+        colision_resolution_items.append(key)
 
         new_key = self.hash_function(data)
 #                 i += 1
 
         while self.values[new_key] is not None and self.values[new_key] != key:
             if self.balanced_factor() >= self.lim_charge:
+                print("{0} insert in bucket {1}".format(data, new_key))
                 new_key = None
                 break
             else:
-                # colision_resolution_items.append(new_key)
-                new_key = (i * self.__hash_function_2(key, data)) % self.size_table
+
+                colision_resolution_items.append(new_key)
+                hd = self.__hash_function_2(key, data)
+                if (i == 1):
+                    print("second hash= {0}".format(hd))
+                print('colision: ({0}*{1}) mod {2} = {3}'.format(i, hd, self.size_table, new_key))
+                new_key = (i * hd) % self.size_table
                 i += 1
+        print("{0} insert in bucket {1}".format(data, new_key))
         return colision_resolution_items, new_key
 
+    # def _str_hash_function(self, data, key):
+    #     return "f({0}) = "
     def _step_by_step(self, step_ord, data_insert_tuple):
+        if len(data_insert_tuple) == 2:
+            key, data = data_insert_tuple
+            print("{0} insert in bucket {1}".format(data, key))
         print(self._mount_table())
