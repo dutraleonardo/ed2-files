@@ -22,8 +22,8 @@ class DoubleHash(HashTable):
 
     def _colision_resolution(self, key, data=None):
         i = 1
-        colision_resolution_items = []
-        colision_resolution_items.append(key)
+        # colision_resolution_items = []
+        # colision_resolution_items.append(key)
 
         new_key = self.hash_function(data)
 # <<<<<<< HEAD
@@ -42,9 +42,10 @@ class DoubleHash(HashTable):
                 new_key = None
                 break
             else:
-                colision_resolution_items.append(new_key)
+                # colision_resolution_items.append(new_key)
                 new_key = (i * self.__hash_function_2(key, data)) % self.size_table
                 i += 1
+# <<<<<<< HEAD
 # <<<<<<< HEAD
         # while self.values[new_key] is not None and self.values[new_key] != key:
         #     new_key = self.__hash_double_function(key, data, i) if \
@@ -57,3 +58,9 @@ class DoubleHash(HashTable):
 # =======
         # return colision_resolution_items, new_key
 # >>>>>>> double hash partially refactored to presentation
+# =======
+        return colision_resolution_items, new_key
+
+    def _step_by_step(self, step_ord, data_insert_tuple):
+        print(self._mount_table())
+# >>>>>>> open hashing with linked list presentation finished
