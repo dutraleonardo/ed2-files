@@ -8,7 +8,11 @@ class QuadraticProbing(HashTable):
         Basic Hash Table example with open addressing using Quadratic Probing 
     """
     def __init__(self, *args, **kwargs):
+        self.lim_charge = self._lim_charge_func()
         super().__init__(*args, **kwargs)
+
+    def _lim_charge_func(self):
+        return len(self.values) // 2 + 1
 
     def _colision_resolution(self, key, data=None):
         i = 1

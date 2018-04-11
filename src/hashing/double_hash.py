@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from .hash_table import HashTable
-from number_theory.prime_numbers import next_prime, check_prime
+from .number_theory.prime_numbers import next_prime, check_prime
 
 
 class DoubleHash(HashTable):
@@ -11,21 +11,21 @@ class DoubleHash(HashTable):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def __hash_function_2(self, value, data):
-
-        next_prime_gt = next_prime(value % self.size_table) \
-            if not check_prime(value % self.size_table) else value % self.size_table  #gt = bigger than
+    def __r(self, data):
+        next_prime_gt = next_prime(len(self.values) // 2)
         return next_prime_gt - (data % next_prime_gt)
 
     def __hash_double_function(self, key, data, increment):
-        return (increment * self.__hash_function_2(key, data)) % self.size_table
+        return (increment * self.__r(data)) % self.size_table
 
-    def _colision_resolution(self, key, data=None):
+    def _colision_presentation(self, **kwargs):
+        return 'colision: ({i}*{r}) mod {size_table} = {new_key}'.format(**kwargs)#i, r, self.size_table, new_key)
+
+    def _colision_resolution(self, key, data=None ):
         i = 1
-        colision_resolution_items = []
-        colision_resolution_items.append(key)
-
+        print('colision: {0} mod {1} = {2}'.format(data, len(self.values), key))
         new_key = self.hash_function(data)
+<<<<<<< HEAD
 # <<<<<<< HEAD
 
 #         while self.values[new_key] is not None and self.values[new_key] != key:
@@ -38,15 +38,18 @@ class DoubleHash(HashTable):
 # =======
         while self.values[new_key] is not None \
                  and self.values[new_key] != key:
+=======
+        r = self.__r(data)
+        
+        while self.values[new_key] is not None and self.values[new_key] != key:
+>>>>>>> corrections in presentation
             if self.balanced_factor() >= self.lim_charge:
-                print("{0} insert in bucket {1}".format(data, new_key))
                 new_key = None
                 break
+            
             else:
-
-                colision_resolution_items.append(new_key)
-                hd = self.__hash_function_2(key, data)
                 if (i == 1):
+<<<<<<< HEAD
                     print("second hash= {0}".format(hd))
                 print('colision: ({0}*{1}) mod {2} = {3}'.format(i, hd, self.size_table, new_key))
                 new_key = (i * hd) % self.size_table
@@ -79,3 +82,14 @@ class DoubleHash(HashTable):
             print("{0} insert in bucket {1}".format(data, key))
         print(self._mount_table())
 # >>>>>>> open hashing with linked list presentation finished
+# =======
+                    print("r = {0}".format(r))
+                new_key = self.__hash_double_function(new_key, data, i)
+                if self.values[new_key] is not None and self.values[new_key] != key:
+                    print(self._colision_presentation(
+                            i=i, r=r, size_table=self.size_table, new_key=new_key))
+                i += 1  
+                
+        print("{0} insert in bucket {1}".format(data, new_key))
+        return new_key
+# >>>>>>> corrections in presentation
