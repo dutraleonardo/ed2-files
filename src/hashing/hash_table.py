@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from number_theory.prime_numbers import next_prime
+from .number_theory.prime_numbers import next_prime
 from terminaltables import AsciiTable
 
 class HashTable:
@@ -51,56 +51,59 @@ class HashTable:
         return "{0} mod {1} = {2}".format(data, self.size_table, key)
 
     def _step_by_step(self, step_ord, data_insert_tuple):
-
+        pass
         # print(data_insert_tuple)
-        print("step {0}".format(step_ord))
-        if data_insert_tuple is not None:
-            if len(data_insert_tuple) == 2:
-                key, data = data_insert_tuple
-                print(self._str_hash_function(data, key))
-                print("{0} insert in bucket {1}".format(data, key))
-            elif len(data_insert_tuple) > 2:
-                data, colision_list_items, new_key = data_insert_tuple
-                if len(colision_list_items) > 0:
-                    [print("colision: " + self._str_hash_function(data + index, item)) for index, item
-                     in enumerate(colision_list_items)]
-                    print("{0} insert in bucket {1}".format(data, new_key))
-            else:
-                print("Rehashing")
+        # print("step {0}".format(step_ord))
+        # if data_insert_tuple is not None:
+        #     if len(data_insert_tuple) == 2:
+        #         key, data = data_insert_tuple
+        #         print(self._str_hash_function(data, key))
+        #         print("{0} insert in bucket {1}".format(data, key))
+        #     elif len(data_insert_tuple) > 2:
+        #         data, colision_list_items, new_key = data_insert_tuple
+        #         if len(colision_list_items) > 0:
+        #             [print("colision: " + self._str_hash_function(data + index, item)) for index, item
+        #              in enumerate(colision_list_items)]
+        #             print("{0} insert in bucket {1}".format(data, new_key))
+        #     else:
+        #         print("Rehashing")
 
-        else:
-            print()
-        print(self._mount_table())
+        # else:
+        #     print()
+        # print(self._mount_table())
 
     def bulk_insert(self, values):
         i = 1
         self.__aux_list = values
-        for value in values:
-            # self.insert_data(value)
-            self._step_by_step(i, self.insert_data(value))
-            i += 1
+        # map(self.insert_data())
+        [self.insert_data(value) for value in values]
+        print(self._mount_table())
 
     def _set_value(self, key, data):
         self.values[key] = data
         self._keys[key] = data
 
-    def _colision_resolution(self, key, data=None):
+    def _colision_presentation(self, **kwargs):
+        return 'colision: {data} mod {size_table} = {}'.format(**kwargs)
 
-        colision_resolution_items = []
-        colision_resolution_items.append(key)
+    def _insert_presentation(self, **kwargs):
+        return '{data} mod {size_table} = {key}'
+
+    def _colision_resolution(self, key, data=None):
         new_key = self.hash_function(key + 1)
 
         while self.values[new_key] is not None \
                 and self.values[new_key] != key:
 
-            if self.values.count(None) > 0:
-                colision_resolution_items.append(new_key)
+            if self.values.count(None) > 0 and self.values[new_key] is not None \
+                and self.values[new_key] != key:
+                self._colision_presentation(data, self.size_table, new_key)
                 new_key = self.hash_function(new_key + 1)
             else:
                 new_key = None
                 break
 
-        return colision_resolution_items, new_key
+        return new_key
 
     def rehashing(self):
         survivor_values = [value for value in self.values if value is not None]
@@ -109,26 +112,31 @@ class HashTable:
         self.values = [None] * self.size_table #hell's pointers D: don't DRY ;/
         map(self.insert_data, survivor_values)
 
+    def _insert_presentation(self, key, data, **kwargs):
+        return 'insert {0} in bucket {1}'.format(data, key)
+
     def insert_data(self, data):
         key = self.hash_function(data)
 
         if self.values[key] is None:
             self._set_value(key, data)
+            print(self._insert_presentation(data=data, size_table=self.size_table, key=key))
             return key, data
 
         elif self.values[key] == data:
             pass
 
         else:
-            colision_list_items, new_key = self._colision_resolution(key, data)
+            new_key = self._colision_resolution(key, data)
             if new_key is not None:
                 self._set_value(new_key, data)
-                return data, colision_list_items, new_key
+                print(self._insert_presentation(data=data, size_table=self.size_table, key=new_key))
             else:
                 self.rehashing()
                 print("rehashing {0}".format(self.size_table))
                 self.insert_data(data)
 
+        
 
 
 
