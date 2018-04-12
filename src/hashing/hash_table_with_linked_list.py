@@ -9,7 +9,6 @@ class HashTableWithLinkedList(HashTable):
         super().__init__(*args, **kwargs)
 
     def _set_value(self, key, data):
-        print(key)
         self.values[key] = deque([]) if self.values[key] is None else self.values[key]  
         self.values[key].appendleft(data)
         self._keys[key] = self.values[key]

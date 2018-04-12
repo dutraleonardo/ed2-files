@@ -20,7 +20,9 @@ class HashTable:
         self.lim_charge = 0.75 if lim_charge is None else lim_charge
         self.charge_factor = 1 if charge_factor is None else charge_factor
         self.__aux_list = []
-        self._keys = {} # the result of hash_function operation
+        self._keys = {}
+        self.with_rehashing = False
+        # the result of hash_function operation
         [self._initialize_keys(index) for index in range(self.size_table)]
 
     def _initialize_keys(self, index):
@@ -131,10 +133,12 @@ class HashTable:
             if new_key is not None:
                 self._set_value(new_key, data)
                 print(self._insert_presentation(data=data, size_table=self.size_table, key=new_key))
-            else:
+            elif new_key is None and self.with_rehashing is True:
                 self.rehashing()
                 print("rehashing {0}".format(self.size_table))
                 self.insert_data(data)
+            else:
+                pass
 
         
 
