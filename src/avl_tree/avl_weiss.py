@@ -11,8 +11,8 @@ class BinaryTree(object):
         self.left = None
         self.right = None
 
-    
-    def _build_tree_string(self, root, curr_index, index=False, delimiter='-'):
+    @classmethod
+    def _build_tree_string(cls, root, curr_index, index=False, delimiter='-'):
         """Recursively traverse down the binary tree build a pretty-print string.
 
         In each recursive call, a "box" of characters visually representing the
@@ -44,17 +44,17 @@ class BinaryTree(object):
         line1 = []
         line2 = []
         if index:
-            node_repr = '{}{}{}'.format(curr_index, delimiter, root.content)
+            node_repr = '{}{}{}'.format(curr_index, delimiter, root.val)
         else:
-            node_repr = str(root.content)
+            node_repr = str(root.val)
 
         new_root_width = gap_size = len(node_repr)
 
         # Get the left and right sub-boxes, their widths, and root repr positions
         l_box, l_box_width, l_root_start, l_root_end = \
-            self._build_tree_string(root.left, 2 * curr_index + 1, index, delimiter)
+            cls._build_tree_string(root.left, 2 * curr_index + 1, index, delimiter)
         r_box, r_box_width, r_root_start, r_root_end = \
-            self._build_tree_string(root.right, 2 * curr_index + 2, index, delimiter)
+            cls._build_tree_string(root.right, 2 * curr_index + 2, index, delimiter)
 
         # Draw the branch connecting the current root to the left sub-box
         # Pad with whitespaces where necessary
@@ -95,8 +95,23 @@ class BinaryTree(object):
         # Return the new box, its width and its root positions
         return new_box, len(new_box[0]), new_root_start, new_root_end
 
-    def display(self):
-        lines = self._build_tree_string(self, 0, False, '-')[0]
+    # def display(self):
+    #     def print_tree(tree, depth):
+    #         if tree:
+    #             if depth:
+    #                 print("|  " * (depth-1) + '+--+' +str(tree.val))
+    #             else:
+    #                 print('+' +str(tree.val))
+
+    #             if tree.left or tree.right:
+    #                 print_tree(tree.left, depth+1)
+    #                 print_tree(tree.right, depth+1)
+    #         else:
+    #             print ("  " * depth + 'None')
+        # call the recursive function
+    @classmethod
+    def display(cls, tree):
+        lines = cls._build_tree_string(tree, 0, False, '-')[0][:-1]
         print('\n' + '\n'.join((line.rstrip() for line in lines)))
 
 class AVL(BinaryTree):
@@ -111,6 +126,7 @@ class AVL(BinaryTree):
         length, res = len(in_list), cls()
         for item in in_list:
             res = res.insert(item)
+            cls.display(res)
         return res
 
     @classmethod
@@ -179,6 +195,7 @@ class AVL(BinaryTree):
                flag = 1 -> right node unbalanced
         """
         # Right node unbalanced
+        print('RS({0})'.format(self.val))
         if flag:
             k1, k2 = self, self.right
             k1.right, k2.left = k2.left, k1
@@ -198,6 +215,7 @@ class AVL(BinaryTree):
                flag = 1 -> right node unbalanced
         """
         # Right node unbalanced
+        print('DR({1})'.format(self.val))
         if flag:
             k1, k2, k3 = self, self.right, self.right.left
             k1.right, k2.left, k3.left, k3.right = \
@@ -227,6 +245,7 @@ class AVL(BinaryTree):
         # When input_tree is an empty tree
         if self.val == "EmptyNode":
             self.val = content
+            # self.root = self
             return self
         # Left subtree operation
         elif content < self.val:
@@ -324,9 +343,9 @@ class AVL(BinaryTree):
         else:
             return AVL()        
 
-if __name__ == "__main__":
-    import doctest
-    import random
-    doctest.testmod()
-    my_avl = AVL.createFromList(xrange(1,100))
-    my_avl.display() 
+# if __name__ == "__main__":
+#     import doctest
+#     import random
+#     doctest.testmod()
+#     my_avl = AVL.createFromList(xrange(1,100))
+#     my_avl.display() 

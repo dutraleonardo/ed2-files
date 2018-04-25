@@ -1,39 +1,121 @@
 #!/usr/bin/env python3
-from binarytree import Node
+# from binarytree import Node
+
+
+class Node(object):
+    def __init__(self, value, left=None, right=None):
+
+        """Basic node representation
+            :param value: key value node
+            :param left: left node object of the current node( self )
+            :param right: right node object of the current node( self )
+        """
+        self.value = value
+        self.left = left
+        self.right = right
+        self.height = 0
+    
+    def __str__(self):
+        return str(self.value)
 
 
 class AvlTree:
     balanced_factor = 1
 
+    # def __init__(self, nodes=None):
+    #     self.nodes = []
+    #     if nodes is not None:
+    #         self.bulk_insert(nodes)
+
     def __init__(self, root=None, list_values=None):
         self.root = None if root is not None else root 
+        # self.nodes = []
         if list_values is not None:
             self.bulk_insert(list_values)
 
+    def _height(self, node):
+        return node.height if node is not None else -1
+        
     def bulk_insert(self, list_values):
-        [self.insert(value) for value in list_values]
+        """insert a collections of nodes"""
+        # t = self.insert(list_values[0])
+        # for item in list_values[1:]:
+        #     print(t.value)
+        #     t = self.insert(item,t)
+        [self.insert(item) for item in list_values]
+            
 
-    def insert(self, value, node=None):
-        self.root = Node(value) if (self.root is None and node is None) else self.root
-        node = self.root if node is None else node
-        bigger_than = value > node.value
-        less_than = value < node.value
+    def insert(self, value, current_node=None):
+        """Basic insertion of one node in essential Binary tree
+            :param value: value's node
+            :param node: current node which the child node(node value) is associated ( left or right)
+        """
+        # node = self.root if node is None else node
+        
 
-        if less_than and not (node.left is None):
-            node = self.insert(value, node.left)
-        elif less_than and node.left is None:
-            node.left = Node(value)
-            return  
-        if bigger_than and not (node.right is None):
-            print(node.value, self.root.value)
-            node = self.insert(value, node.right)
-        elif bigger_than and node.right is None:
-            node.right = Node(value)
-            return
+        if current_node is None:
+            current_node = self.root if self.root is not None else None
+            
         else:
-            self._balance(node)
+            pass
+            # self.root = current_node if self.root is None else self.root
+            
+        bigger_than = value > current_node.value
+        less_than = value < current_node.value
+
+        if less_than:
+            current_node.left = self.insert(value, current_node.left)
+            current_node = self._balance(current_node)
+
+        if bigger_than:
+            current_node.right = self.insert(value, current_node.right)
+            current_node = self._balance(current_node)
+
+        current_node.height = max(self._height(current_node.left), self._height(current_node.right)) + 1
+        return current_node
     
     def _balance(self, node):
+        print('node to balance: ' + str(node.value))
+        if node is None:
+            return None
+        
+        if self._height(node.left) - self._height(node.right) > 1:
+            if self._height(node.left.left) >= self._height(node.left.right):
+                node = self._rotate_with_left_child(node)
+            else:
+                node = self._double_with_left_rotate(node)
+            # node = self._rotate_with_left_child(node) \
+            # if self._height(node.left.left) >= self._height(node.left.right) else \
+            # self._double_with_left_rotate(node)
+        
+        elif self._height(node.right) - self._height(node.left) > 1:
+            if self._height(node.right.right) >= self._height(node.right.left):
+                node = self._rotate_with_right_child(node)
+            else:
+                node = self._double_with_right_rotate(node)
+            # node = self._rotate_with_right_child(node)
+            # if self._height(node.right.right) >= self._height(node.right.left) else \
+            # self._double_with_right_rotate(node)
+        
+        # node.height = max(self._height(node.left), self._height(node.right)) + 1
+        return node
+    
+    def _rotate_with_left_child(self, node):
+        print('test')
+        aux_node = node.left
+        node.left = aux_node.right
+        aux_node.right = node
+        node.height = max(self._height(node.left), self._height(node.right) ) + 1
+        aux_node.height = max(self._height(aux_node.left), node.height) + 1
+        return aux_node
+
+    def _rotate_with_right_child(self, node):
+        pass
+    
+    def _double_with_left_rotate(self, node):
+        pass
+    
+    def _double_with_right_rotate(self, node):
         pass
 
     def _build_tree_string(self, root, curr_index, index=False, delimiter='-'):
@@ -61,9 +143,6 @@ class AvlTree:
             the width of the box, and the start-end positions of the new root value
             repr string.
         :rtype: ([str], int, int, int)
-
-        .. _level-order:
-            https://en.wikipedia.org/wiki/Tree_traversal
         """
         if root is None:
             return [], 0, 0, 0
