@@ -121,10 +121,14 @@ class AVL(BinaryTree):
 
     @classmethod
     def createFromList(cls, in_list):
+        print('RS(node value) ---> Single Rotation')
+        print('DR(node value) ---> Double Rotation')
+
         if not in_list:
             return AVL()
         length, res = len(in_list), cls()
         for item in in_list:
+            print('\n inserting {0}\n'.format(item))
             res = res.insert(item)
             cls.display(res)
         return res
@@ -195,7 +199,7 @@ class AVL(BinaryTree):
                flag = 1 -> right node unbalanced
         """
         # Right node unbalanced
-        print('RS({0})'.format(self.val))
+        print('*-*-*-*-* RS({0}) *-*-*-*-*'.format(self.val))
         if flag:
             k1, k2 = self, self.right
             k1.right, k2.left = k2.left, k1
@@ -215,7 +219,7 @@ class AVL(BinaryTree):
                flag = 1 -> right node unbalanced
         """
         # Right node unbalanced
-        print('DR({1})'.format(self.val))
+        print('\nDR({0})'.format(self.val))
         if flag:
             k1, k2, k3 = self, self.right, self.right.left
             k1.right, k2.left, k3.left, k3.right = \
