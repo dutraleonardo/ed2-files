@@ -6,10 +6,12 @@
 #
 
 class BinaryTree(object):
-    def __init__(self, content=-1):
+
+    def __init__(self, content=-1, display=True):
         self.val = content
         self.left = None
         self.right = None
+        self.display = display
 
     @classmethod
     def _build_tree_string(cls, root, curr_index, index=False, delimiter='-'):
@@ -95,42 +97,30 @@ class BinaryTree(object):
         # Return the new box, its width and its root positions
         return new_box, len(new_box[0]), new_root_start, new_root_end
 
-    # def display(self):
-    #     def print_tree(tree, depth):
-    #         if tree:
-    #             if depth:
-    #                 print("|  " * (depth-1) + '+--+' +str(tree.val))
-    #             else:
-    #                 print('+' +str(tree.val))
-
-    #             if tree.left or tree.right:
-    #                 print_tree(tree.left, depth+1)
-    #                 print_tree(tree.right, depth+1)
-    #         else:
-    #             print ("  " * depth + 'None')
-        # call the recursive function
     @classmethod
-    def display(cls, tree):
+    def display_tree(cls, tree):
         lines = cls._build_tree_string(tree, 0, False, '-')[0][:-1]
         print('\n' + '\n'.join((line.rstrip() for line in lines)))
 
 class AVL(BinaryTree):
-    def __init__(self, content="EmptyNode"):
+    def __init__(self, content="EmptyNode", display=True):
         self._height = 0
-        super(AVL,self).__init__(content)
+        super(self.__class__, self).__init__(content, display)
 
-    @classmethod
-    def createFromList(cls, in_list):
-        print('RS(node value) ---> Single Rotation')
-        print('DR(node value) ---> Double Rotation')
+    # @classmethod
+    def createFromList(self, in_list):
+        if self.display is True:
+            print('RS(node value) ---> Single Rotation')
+            print('DR(node value) ---> Double Rotation')
 
         if not in_list:
             return AVL()
-        length, res = len(in_list), cls()
+        length, res = len(in_list), self.__class__(display=self.display)
         for item in in_list:
-            print('\n inserting {0}\n'.format(item))
-            res = res.insert(item)
-            cls.display(res)
+            if self.display is True:
+                print('\n inserting {0}\n'.format(item))
+                res = res.insert(item)
+                self.__class__.display_tree(res)
         return res
 
     @classmethod
@@ -199,7 +189,9 @@ class AVL(BinaryTree):
                flag = 1 -> right node unbalanced
         """
         # Right node unbalanced
-        print('*-*-*-*-* RS({0}) *-*-*-*-*'.format(self.val))
+        if self.display is True:
+            print('*-*-*-*-* RS({0}) *-*-*-*-*'.format(self.val))
+
         if flag:
             k1, k2 = self, self.right
             k1.right, k2.left = k2.left, k1
@@ -219,7 +211,9 @@ class AVL(BinaryTree):
                flag = 1 -> right node unbalanced
         """
         # Right node unbalanced
-        print('\nDR({0})'.format(self.val))
+        if self.display is True:
+            print('\nDR({0})'.format(self.val))
+
         if flag:
             k1, k2, k3 = self, self.right, self.right.left
             k1.right, k2.left, k3.left, k3.right = \
@@ -263,7 +257,7 @@ class AVL(BinaryTree):
                         self = self.doubleRotate(0)
             # If left subtree is None
             else:
-                new_node = AVL(content)
+                new_node = AVL(content, self.display)
                 self.left = new_node
 
         # Right subtree operation
@@ -277,7 +271,7 @@ class AVL(BinaryTree):
                         self = self.doubleRotate(1)
             # If right subtree is None
             else:
-                new_node = AVL(content)
+                new_node = AVL(content, self.display)
                 self.right = new_node
             # Keep searching through right subtree
         # Operation on height
@@ -347,9 +341,3 @@ class AVL(BinaryTree):
         else:
             return AVL()        
 
-# if __name__ == "__main__":
-#     import doctest
-#     import random
-#     doctest.testmod()
-#     my_avl = AVL.createFromList(xrange(1,100))
-#     my_avl.display() 
